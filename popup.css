@@ -149,3 +149,7 @@ body {
   background: var(--border);
   border-radius: 3px;
 }
+
+.app-status.status-unresponsive {
+  color: var(--red);
+}

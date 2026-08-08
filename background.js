@@ -24,9 +24,9 @@ function checkAllApps() {
       chrome.tabs.create({ url: app.url, active: false }, function (tab) {
         tabToUrl[tab.id] = app.url;
 
-        // Safety net: if content.js never responds within 20s, close anyway
         setTimeout(function () {
           if (tabToUrl[tab.id]) {
+            updateAppStatus(app.url, "unresponsive");
             chrome.tabs.remove(tab.id);
             delete tabToUrl[tab.id];
           }

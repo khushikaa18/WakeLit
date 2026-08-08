@@ -6,6 +6,21 @@ const checkAllBtn = document.getElementById("checkAllBtn");
 checkAllBtn.addEventListener("click", function () {
   chrome.runtime.sendMessage({ type: "CHECK_NOW" });
 });
+function timeAgo(timestamp) {
+  if (!timestamp) return "never checked";
+
+  const diffMs = Date.now() - timestamp;
+  const diffMins = Math.round(diffMs / 60000);
+
+  if (diffMins < 1) return "just now";
+  if (diffMins < 60) return diffMins + "m ago";
+
+  const diffHours = Math.round(diffMins / 60);
+  if (diffHours < 24) return diffHours + "h ago";
+
+  const diffDays = Math.round(diffHours / 24);
+  return diffDays + "d ago";
+}
 
 function loadApps() {
     chrome.storage.local.get("apps",function (result){
@@ -20,9 +35,20 @@ function renderApps(apps) {
   apps.forEach(function (app, index) {
     const li = document.createElement("li");
 
-    const label = document.createElement("span");
+    const info = document.createElement("div");
+    info.className = "app-info";
+
+    const urlLine = document.createElement("div");
+    urlLine.className = "app-url";
+    urlLine.textContent = app.url;
+
+    const statusLine = document.createElement("div");
     const statusText = app.status || "unknown";
-    label.textContent = app.url + " — " + statusText;
+    statusLine.className = "app-status status-" + statusText;
+    statusLine.textContent = statusText + " · " + timeAgo(app.lastChecked);
+
+    info.appendChild(urlLine);
+    info.appendChild(statusLine);
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "✕";
@@ -30,7 +56,7 @@ function renderApps(apps) {
       removeApp(index);
     });
 
-    li.appendChild(label);
+    li.appendChild(info);
     li.appendChild(removeBtn);
     appList.appendChild(li);
   });
