@@ -1,8 +1,15 @@
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.alarms.create("checkApps", {
-    periodInMinutes: 360
+function scheduleAlarm() {
+  chrome.storage.local.get("intervalMinutes", function (result) {
+    const minutes = result.intervalMinutes || 360;
+    chrome.alarms.clear("checkApps", function () {
+      chrome.alarms.create("checkApps", { periodInMinutes: minutes });
+      console.log("WakeLit: alarm scheduled for every " + minutes + " minutes.");
+    });
   });
-  console.log("WakeLit: alarm scheduled.");
+}
+
+chrome.runtime.onInstalled.addListener(function () {
+  scheduleAlarm();
 });
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
@@ -24,6 +31,8 @@ function checkAllApps() {
       chrome.tabs.create({ url: app.url, active: false }, function (tab) {
         tabToUrl[tab.id] = app.url;
 
+        // Safety net: if content.js never responds within 20s, mark it
+        // unresponsive and close the tab anyway.
         setTimeout(function () {
           if (tabToUrl[tab.id]) {
             updateAppStatus(app.url, "unresponsive");
@@ -50,10 +59,15 @@ function updateAppStatus(url, status) {
   });
 }
 
-// Hear back from content.js
+// Hear back from content.js (or the popup)
 chrome.runtime.onMessage.addListener(function (message, sender) {
   if (message.type === "CHECK_NOW") {
     checkAllApps();
+    return;
+  }
+
+  if (message.type === "INTERVAL_CHANGED") {
+    scheduleAlarm();
     return;
   }
 

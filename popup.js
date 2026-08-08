@@ -2,6 +2,7 @@ const urlInput = document.getElementById('urlInput');
 const addBtn = document.getElementById('addBtn');
 const appList = document.getElementById('appList');
 const checkAllBtn = document.getElementById("checkAllBtn");
+const intervalSelect = document.getElementById("intervalSelect");
 
 checkAllBtn.addEventListener("click", function () {
   chrome.runtime.sendMessage({ type: "CHECK_NOW" });
@@ -90,5 +91,19 @@ chrome.storage.onChanged.addListener(function (changes, area) {
     renderApps(changes.apps.newValue || []);
   }
 });
+function loadInterval() {
+  chrome.storage.local.get("intervalMinutes", function (result) {
+    const saved = result.intervalMinutes || 360;
+    intervalSelect.value = String(saved);
+  });
+}
+
+intervalSelect.addEventListener("change", function () {
+  const minutes = Number(intervalSelect.value);
+  chrome.storage.local.set({ intervalMinutes: minutes }, function () {
+    chrome.runtime.sendMessage({ type: "INTERVAL_CHANGED" });
+  });
+});
 
 loadApps();
+loadInterval();
