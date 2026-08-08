@@ -1,0 +1,151 @@
+:root {
+  --bg: #fdfdfd;
+  --surface: #f4f4f6;
+  --border: #e3e3e8;
+  --text: #171923;
+  --text-muted: #8a8d9a;
+  --red: #d81f2a;
+  --red-hover: #b8181f;
+  --awake: #2fa584;
+  --asleep: #e08b2f;
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  background: var(--bg);
+}
+
+
+body {
+  margin: 0;
+  width: 300px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+    padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.app {
+  padding: 16px;
+}
+
+.topbar {
+  margin-bottom: 14px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+#urlInput {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 12px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+}
+
+#urlInput:focus {
+  border-color: var(--red);
+}
+
+.btn-primary {
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 9px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--red-hover);
+}
+
+.btn-secondary {
+  width: 100%;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+#appList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 180px;
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+#appList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11.5px;
+}
+
+#appList li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+#appList li button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+#appList li button:hover {
+  color: var(--red);
+}
+
+#appList::-webkit-scrollbar {
+  width: 5px;
+}
+
+#appList::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
